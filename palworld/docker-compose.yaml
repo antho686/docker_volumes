@@ -1,0 +1,32 @@
+services:
+  palworld:
+    image: thijsvanloef/palworld-server-docker
+    container_name: palworld
+    hostname: palworld
+    ports:
+      - 8211:8211/udp # API Port
+      - 8212:8212/udp # Actual Server Port
+      - 27015:27015/udp # Steam Port
+      - 25575:25575/udp # RCON
+    env_file:
+      - .env # set server_name, password and admin_password in the .env file at least
+    environment:
+      - PUID=99
+      - PGID=100
+      - PLAYERS=32
+      - MULTITHREADING=TRUE
+      - COMMUNITY=FALSE  # Disable this if you do not want your server to show up in the community servers tab, USE WITH SERVER_PASSWORD!
+      - RCON_ENABLED=TRUE
+      - RCON_PORT=25575
+      - ALLOW_CONNECT_PLATFORM="Steam"
+      # - PUBLIC_IP="192.168.30.110"
+      # - PUBLIC_PORT=8113
+      - REST_API_ENABLED=TRUE
+      # Enable the environment variables below if you have COMMUNITY=true
+      #- SERVER_PASSWORD="I love Greg Hilston"
+      #- SERVER_NAME="GregHilston.com Example"
+      #- ADMIN_PASSWORD="supersecretpassword"
+
+    volumes:
+      - ./data:/palworld/
+    restart: unless-stopped
